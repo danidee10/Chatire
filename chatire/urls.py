@@ -22,4 +22,5 @@ urlpatterns = [
     # Custom URL's
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
+    path('api/', include('chat.urls'))
 ]
