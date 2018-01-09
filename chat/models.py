@@ -9,6 +9,14 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+def deserialize_user(user):
+    """Deserialize user instance to JSON."""
+    return {
+        'id': user.id, 'username': user.username, 'email': user.email,
+        'first_name': user.first_name, 'last_name': user.last_name
+    }
+
+
 class TrackableDateModel(models.Model):
     """Abstract model to Track the creation/updated date for a model."""
 
@@ -46,7 +54,7 @@ class ChatSessionMessage(TrackableDateModel):
 
     def to_json(self):
         """deserialize message to JSON."""
-        return {'user_id': self.user.id, 'message': self.message}
+        return {'user': deserialize_user(self.user), 'message': self.message}
 
 
 class ChatSessionMember(TrackableDateModel):

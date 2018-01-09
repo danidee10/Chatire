@@ -71,7 +71,7 @@
     methods: {
       signUp () {
         $.post('http://localhost:8000/auth/users/create/', this.$data, (data) => {
-          alert("Your account has been created. You will be signed in automatically")
+          alert('Your account has been created. You will be signed in automatically')
           this.signIn()
         })
         .fail((response) => {
@@ -84,7 +84,8 @@
 
         $.post('http://localhost:8000/auth/token/create/', credentials, (data) => {
           sessionStorage.setItem('authToken', data.auth_token)
-          this.$router.push('/')
+          sessionStorage.setItem('username', this.username)
+          this.$router.push('/chat')
         })
         .fail((response) => {
           alert(response.responseText)
