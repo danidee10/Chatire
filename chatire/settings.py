@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'djoser',
 
     # Our apps
-    'chat'
+    'chat',
+    'notifications'
 ]
 
 MIDDLEWARE = [
@@ -139,6 +140,11 @@ REST_FRAMEWORK = {
     ),
 }
 
+
 # django-cors-header Configuration
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# notifications settings
+NOTIFICATIONS_CHANNELS = ['chat.channels.BroadCastWebSocketChannel']

@@ -6,7 +6,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('chat/new/', views.NewChatSession.as_view()),
-    path('chat/join/', views.JoinChatView.as_view()),
-    path('chat/message/<uri>/', views.ChatSessionMessageView.as_view()),
+    path('chats/', views.ChatSessionView.as_view()),
+    path('chats/<uri>/', views.ChatSessionView.as_view()),
+    path('chats/<uri>/messages/', views.ChatSessionMessageView.as_view()),
 ]

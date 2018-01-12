@@ -5,12 +5,13 @@ from .models import (
     ChatSession, ChatSessionMember, ChatSessionMessage, deserialize_user
 )
 
+from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
+from notifications.signals import notify
 
 
-class NewChatSession(APIView):
+class ChatSessionView(APIView):
     """Manage Chat sessions."""
 
     permission_classes = (permissions.IsAuthenticated,)
@@ -26,24 +27,23 @@ class NewChatSession(APIView):
             'message': 'New chat session created'
         })
 
+    def patch(self, request, *args, **kwargs):
+        """Add a user to a chat session."""
+        User = get_user_model()
 
-class JoinChatView(APIView):
-    """Allow a user to join a Chat Session."""
-
-    permission_classes = (permissions.IsAuthenticated,)
-        
-    def put(self, request, *args, **kwargs):
-        """Handle the POST request."""
-        uri = request.data['uri']
-        user = request.user
+        uri = kwargs['uri']
+        username = request.data['username']
+        user = User.objects.get(username=username)
 
         chat_session = ChatSession.objects.get(uri=uri)
+        owner = chat_session.owner
 
-        chat_session.members.get_or_create(
-            user=user, chat_session=chat_session
-        )
+        if owner != user:  # Only allow non owners join the room
+            chat_session.members.get_or_create(
+                user=user, chat_session=chat_session
+            )
 
-        owner = deserialize_user(chat_session.owner)
+        owner = deserialize_user(owner)
         members = [
             deserialize_user(chat_session.user) 
             for chat_session in chat_session.members.all()
@@ -55,7 +55,7 @@ class JoinChatView(APIView):
             'message': '%s joined that chat' % user.username,
             'user': deserialize_user(user)
         })
-
+    
 
 class ChatSessionMessageView(APIView):
     """Create/Get Chat session messages."""
@@ -83,9 +83,19 @@ class ChatSessionMessageView(APIView):
         user = request.user
         chat_session = ChatSession.objects.get(uri=uri)
 
-        ChatSessionMessage.objects.create(
+        chat_session_message = ChatSessionMessage.objects.create(
             user=user, chat_session=chat_session, message=message
         )
+
+        notif_args = {
+            'source': user,
+            'source_display_name': user.get_full_name(),
+            'category': 'chat', 'action': 'Sent',
+            'obj': chat_session_message.id,
+            'short_description': 'You a new message', 'silent': True,
+            'extra_data': {'uri': chat_session.uri, 'message': message}
+        }
+        notify.send(sender=self.__class__, **notif_args)
 
         return Response ({
             'status': 'SUCCESS', 'uri': chat_session.uri, 'message': message,

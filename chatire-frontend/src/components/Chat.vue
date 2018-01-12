@@ -84,14 +84,20 @@ export default {
         'Authorization': `Token ${sessionStorage.getItem('authToken')}`
       }
     })
+
+    if (this.$route.params.uri) {
+      this.joinChatSession()
+    }
+
+    setInterval(this.fetchChatSessionHistory, 3000)
   },
 
   methods: {
     startChatSession () {
-      $.post('http://localhost:8000/api/chat/new/', (data) => {
+      $.post('http://localhost:8000/api/chats/', (data) => {
         alert("A new session has been created you'll be redirected automatically")
         this.sessionStarted = true
-        this.$router.push(`/chat/${data.uri}/`)
+        this.$router.push(`/chats/${data.uri}/`)
       })
       .fail((response) => {
         alert(response.responseText)
@@ -99,15 +105,39 @@ export default {
     },
 
     postMessage (event) {
-      const uri = this.$route.params.uri
       const data = {message: this.message}
 
-      $.post(`http://localhost:8000/api/chat/message/${uri}/`, data, (data) => {
+      $.post(`http://localhost:8000/api/chats/${this.$route.params.uri}/messages/`, data, (data) => {
         this.messages.push(data)
         this.message = '' // clear the message after sending
       })
       .fail((response) => {
         alert(response.responseText)
+      })
+    },
+
+    joinChatSession () {
+      const uri = this.$route.params.uri
+
+      $.ajax({
+        url: `http://localhost:8000/api/chats/${uri}/`,
+        data: {username: this.username},
+        type: 'PATCH',
+        success: (data) => {
+          const user = data.members.find((member) => member.username === this.username)
+
+          if (user) {
+            // The user belongs/has joined the session
+            this.sessionStarted = true
+            this.fetchChatSessionHistory()
+          }
+        }
+      })
+    },
+
+    fetchChatSessionHistory () {
+      $.get(`http://127.0.0.1:8000/api/chats/${this.$route.params.uri}/messages/`, (data) => {
+        this.messages = data.messages
       })
     }
   }
