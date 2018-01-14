@@ -89,7 +89,7 @@ export default {
       this.joinChatSession()
     }
 
-    setInterval(this.fetchChatSessionHistory, 3000)
+    this.connectToWebSocket()
   },
 
   methods: {
@@ -108,7 +108,6 @@ export default {
       const data = {message: this.message}
 
       $.post(`http://localhost:8000/api/chats/${this.$route.params.uri}/messages/`, data, (data) => {
-        this.messages.push(data)
         this.message = '' // clear the message after sending
       })
       .fail((response) => {
@@ -139,6 +138,34 @@ export default {
       $.get(`http://127.0.0.1:8000/api/chats/${this.$route.params.uri}/messages/`, (data) => {
         this.messages = data.messages
       })
+    },
+
+    connectToWebSocket () {
+      const websocket = new WebSocket(`ws://localhost:8081/${this.$route.params.uri}`)
+      websocket.onopen = this.onOpen
+      websocket.onclose = this.onClose
+      websocket.onmessage = this.onMessage
+      websocket.onerror = this.onError
+    },
+
+    onOpen (event) {
+      console.log('Connection opened.', event.data)
+    },
+
+    onClose (event) {
+      console.log('Connection closed.', event.data)
+
+      // Try and Reconnect after five seconds
+      setTimeout(this.connectToWebSocket, 5000)
+    },
+
+    onMessage (event) {
+      const message = JSON.parse(event.data)
+      this.messages.push(message)
+    },
+
+    onError (event) {
+      alert('An error occured:', event.data)
     }
   }
 }

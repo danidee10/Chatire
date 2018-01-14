@@ -4,6 +4,10 @@ django-notifs==2.5.5
 django-templated-mail==1.0.0
 djangorestframework==3.7.7
 djoser==1.1.5
+gevent==1.2.2
+greenlet==0.4.12
 pika==0.11.2
 pytz==2017.3
+simplejson==3.13.2
 uWSGI==2.0.15
+uwsgitop==0.10
