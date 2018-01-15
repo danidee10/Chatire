@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-center">Welcome to the Chatire!</h1>
+    <h1 class="text-center">Welcome to Chatire!</h1>
     <div id="auth-container" class="row">
       <div class="col-sm-4 offset-sm-4">
         <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
