@@ -2,6 +2,8 @@
 
 A Simple Chat Application built with Vue and Django.
 
+![chatire gif demo](./chatire.gif)
+
 This repo contains the code for my tutorial **[Realtime django: Build a Chat application with Django, RabbitMQ and Vue.js](https://danidee10.github.io/2018/01/01/realtime-django-1.html)**
 
 The tutorial is split into several parts:
