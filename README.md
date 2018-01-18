@@ -1,6 +1,6 @@
 # chatire
 
-A Simple Chat Application built with Vue and Django.
+Real time Chat application built with Vue, Django, RabbitMQ and uWSGI WebSockets.
 
 ![chatire gif demo](./chatire.gif)
 
