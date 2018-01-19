@@ -128,6 +128,7 @@ export default {
             // The user belongs/has joined the session
             this.sessionStarted = true
             this.fetchChatSessionHistory()
+            this.connectToWebSocket()
           }
         }
       })
