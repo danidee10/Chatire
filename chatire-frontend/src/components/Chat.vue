@@ -97,6 +97,7 @@ export default {
         alert("A new session has been created you'll be redirected automatically")
         this.sessionStarted = true
         this.$router.push(`/chats/${data.uri}/`)
+        this.connectToWebSocket()
       })
       .fail((response) => {
         alert(response.responseText)
@@ -128,7 +129,6 @@ export default {
             // The user belongs/has joined the session
             this.sessionStarted = true
             this.fetchChatSessionHistory()
-            this.connectToWebSocket()
           }
         }
       })
