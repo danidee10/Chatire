@@ -87,9 +87,8 @@ export default {
 
     if (this.$route.params.uri) {
       this.joinChatSession()
+      this.connectToWebSocket()
     }
-
-    this.connectToWebSocket()
   },
 
   methods: {
