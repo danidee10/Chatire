@@ -145,6 +145,10 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+# Celery settings
+CELERY_TASK_ALWAYS_EAGER = True
 
 # notifications settings
-NOTIFICATIONS_CHANNELS = ['chat.channels.BroadCastWebSocketChannel']
+NOTIFICATIONS_CHANNELS = {
+    'websocket': 'chat.channels.BroadCastWebSocketChannel'
+}

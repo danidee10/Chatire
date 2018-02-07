@@ -98,7 +98,9 @@ class ChatSessionMessageView(APIView):
                 'message': chat_session_message.to_json()
             }
         }
-        notify.send(sender=self.__class__, **notif_args)
+        notify.send(
+            sender=self.__class__,**notif_args, channels=['websocket']
+        )
 
         return Response ({
             'status': 'SUCCESS', 'uri': chat_session.uri, 'message': message,
