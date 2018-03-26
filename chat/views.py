@@ -1,6 +1,8 @@
 """Views for the chat app."""
 
+from django.http import Http404
 from django.contrib.auth import get_user_model
+
 from .models import (
     ChatSession, ChatSessionMember, ChatSessionMessage, deserialize_user
 )
@@ -106,3 +108,8 @@ class ChatSessionMessageView(APIView):
             'status': 'SUCCESS', 'uri': chat_session.uri, 'message': message,
             'user': deserialize_user(user)
         })
+
+
+def raise_404(request):
+    """Raise a 404 Error."""
+    raise Http404

@@ -136,8 +136,8 @@ STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    )
 }
 
 
@@ -152,3 +152,6 @@ CELERY_TASK_ALWAYS_EAGER = True
 NOTIFICATIONS_CHANNELS = {
     'websocket': 'chat.channels.BroadCastWebSocketChannel'
 }
+
+# djangorestframework-jwt settings
+JWT_ALLOW_REFRESH = True

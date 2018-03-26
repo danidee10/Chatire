@@ -16,11 +16,22 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework_jwt.views import verify_jwt_token
+
+from chat.views import raise_404
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Custom URL's
     path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),
+
+    # disable the old endpoint (Order is important)
+    path('auth/jwt/refresh/', raise_404),
+
+    # Register the new URL under an ambigous name
+    path('this/is/hard/to/find/', verify_jwt_token),
+
+    path('auth/', include('djoser.urls.jwt')),
     path('api/', include('chat.urls'))
 ]

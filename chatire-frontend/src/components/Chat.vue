@@ -92,7 +92,7 @@ export default {
     // Setup headers for all requests
     $.ajaxSetup({
       headers: {
-        'Authorization': `Token ${sessionStorage.getItem('authToken')}`
+        'Authorization': `JWT ${sessionStorage.getItem('authToken')}`
       }
     })
 
@@ -102,6 +102,9 @@ export default {
     }
 
     setTimeout(() => { this.loading = false }, 2000)
+
+    // Refresh the JWT every 240 Seconds (4 minutes)
+    setInterval(this.refreshToken, 240000)
   },
 
   updated () {
@@ -192,6 +195,14 @@ export default {
 
     onError (event) {
       alert('An error occured:', event.data)
+    },
+
+    refreshToken () {
+      const data = {token: sessionStorage.getItem('authToken')}
+
+      $.post('http://127.0.0.1:8000/this/is/hard/to/find/', data, (response) => {
+        sessionStorage.setItem('authToken', response.token)
+      })
     }
   }
 }

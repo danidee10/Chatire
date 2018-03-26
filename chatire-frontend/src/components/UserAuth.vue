@@ -82,8 +82,8 @@
       signIn () {
         const credentials = {username: this.username, password: this.password}
 
-        $.post('http://localhost:8000/auth/token/create/', credentials, (data) => {
-          sessionStorage.setItem('authToken', data.auth_token)
+        $.post('http://localhost:8000/auth/jwt/create/', credentials, (data) => {
+          sessionStorage.setItem('authToken', data.token)
           sessionStorage.setItem('username', this.username)
           this.$router.push('/chats')
         })
