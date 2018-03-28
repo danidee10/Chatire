@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -155,3 +156,4 @@ NOTIFICATIONS_CHANNELS = {
 
 # djangorestframework-jwt settings
 JWT_ALLOW_REFRESH = True
+JWT_EXPIRATION_DELTA = timedelta(minutes=30)
