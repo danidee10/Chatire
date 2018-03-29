@@ -13,6 +13,7 @@ The tutorial is split into several parts:
 - Part 3: [Build an API with django rest framework](https://danidee10.github.io/2018/01/07/realtime-django-3.html)
 - Part 4 [Plug the Vue frontend to the django API](https://danidee10.github.io/2018/01/10/realtime-django-4.html)
 - Part 5 [uWSGI WebSockets](https://danidee10.github.io/2018/01/13/realtime-django-5.html)
+- Part 6 [Extras](https://danidee10.github.io/2018/03/12/real-time-django-6.html)
 
 ## Running the code
 
