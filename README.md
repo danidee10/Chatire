@@ -72,3 +72,7 @@ uwsgi --http :8081 --gevent 100 --module websocket --gevent-monkey-patch --maste
 ```
 
 This starts uwsgi with 100 gevent (greenlet) threads. You can increase it if you want to.
+
+
+### Acknowledgements
+Thanks to [@inhit](https://github.com/ihtiht) for the Logo!
