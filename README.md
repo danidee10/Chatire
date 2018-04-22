@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="250" height="105" src="chatire-frontend/src/assets/logotype.png">
+</p>
+
 # chatire
 
 Real time Chat application built with Vue, Django, RabbitMQ and uWSGI WebSockets.
