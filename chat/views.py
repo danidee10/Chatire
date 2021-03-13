@@ -3,14 +3,14 @@
 from django.http import Http404
 from django.contrib.auth import get_user_model
 
-from .models import (
-    ChatSession, ChatSessionMember, ChatSessionMessage, deserialize_user
-)
-
 from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from notifications.signals import notify
+
+from notifications.utils import notify
+from notifications import default_settings as notifs_settings
+
+from .models import ChatSession, ChatSessionMessage, deserialize_user
 
 
 class ChatSessionView(APIView):
@@ -47,17 +47,17 @@ class ChatSessionView(APIView):
 
         owner = deserialize_user(owner)
         members = [
-            deserialize_user(chat_session.user) 
+            deserialize_user(chat_session.user)
             for chat_session in chat_session.members.all()
         ]
         members.insert(0, owner)  # Make the owner the first member
 
-        return Response ({
+        return Response({
             'status': 'SUCCESS', 'members': members,
-            'message': '%s joined that chat' % user.username,
+            'message': '%s joined the chat' % user.username,
             'user': deserialize_user(user)
         })
-    
+
 
 class ChatSessionMessageView(APIView):
     """Create/Get Chat session messages."""
@@ -69,8 +69,8 @@ class ChatSessionMessageView(APIView):
         uri = kwargs['uri']
 
         chat_session = ChatSession.objects.get(uri=uri)
-        messages = [chat_session_message.to_json() 
-            for chat_session_message in chat_session.messages.all()]
+        messages = [chat_session_message.to_json()
+                    for chat_session_message in chat_session.messages.all()]
 
         return Response({
             'id': chat_session.id, 'uri': chat_session.uri,
@@ -96,15 +96,14 @@ class ChatSessionMessageView(APIView):
             'obj': chat_session_message.id,
             'short_description': 'You a new message', 'silent': True,
             'extra_data': {
-                'uri': chat_session.uri,
+                notifs_settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM:
+                chat_session.uri,
                 'message': chat_session_message.to_json()
             }
         }
-        notify.send(
-            sender=self.__class__,**notif_args, channels=['websocket']
-        )
+        notify(**notif_args, channels=['websocket'])
 
-        return Response ({
+        return Response({
             'status': 'SUCCESS', 'uri': chat_session.uri, 'message': message,
             'user': deserialize_user(user)
         })

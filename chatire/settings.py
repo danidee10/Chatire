@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
+    'channels',
+    'django_jsonfield_backport',  # backport of django 3.1's JSONField
 
     # Our apps
     'chat',
@@ -82,7 +84,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'chatire.wsgi.application'
-
+ASGI_APPLICATION = 'chatire.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -143,17 +145,26 @@ REST_FRAMEWORK = {
 
 
 # django-cors-header Configuration
-
 CORS_ORIGIN_ALLOW_ALL = True
-
-# Celery settings
-CELERY_TASK_ALWAYS_EAGER = True
 
 # notifications settings
 NOTIFICATIONS_CHANNELS = {
-    'websocket': 'chat.channels.BroadCastWebSocketChannel'
+    'websocket': 'notifications.channels.WebSocketChannel'
 }
 
 # djangorestframework-jwt settings
-JWT_ALLOW_REFRESH = True
-JWT_EXPIRATION_DELTA = timedelta(minutes=30)
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=30)
+}
+
+# django-channels
+ASGI_APPLICATION = 'chatire.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    }
+}

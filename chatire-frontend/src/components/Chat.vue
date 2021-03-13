@@ -91,8 +91,8 @@ export default {
 
     // Setup headers for all requests
     $.ajaxSetup({
-      headers: {
-        'Authorization': `JWT ${sessionStorage.getItem('authToken')}`
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', `JWT ${sessionStorage.getItem('authToken')}`)
       }
     })
 
