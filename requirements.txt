@@ -1,7 +1,7 @@
 amqp==2.6.1
 billiard==3.6.3.0
 celery==4.4.7
-Django==2.2
+Django==2.2.13
 django-cors-headers==2.1.0
 django-notifs==3.0.0
 django-templated-mail==1.0.0
