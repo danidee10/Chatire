@@ -3,8 +3,9 @@ import os
 import django
 
 from channels.http import AsgiHandler
-from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.routing import ProtocolTypeRouter, ChannelNameRouter, URLRouter
 
+from notifications import consumers
 from notifications import routing as notifications_routing
 
 

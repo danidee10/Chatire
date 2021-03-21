@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'channels',
+    'channels_postgres',
     'django_jsonfield_backport',  # backport of django 3.1's JSONField
 
     # Our apps
@@ -93,6 +94,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'channels_postgres': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -155,16 +164,20 @@ NOTIFICATIONS_CHANNELS = {
 # djangorestframework-jwt settings
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=30)
+    'JWT_EXPIRATION_DELTA': timedelta(minutes=300000)
 }
 
 # django-channels
 ASGI_APPLICATION = 'chatire.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'BACKEND': 'channels_postgres.core.PostgresChannelLayer',
         'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
-        },
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
     }
 }
