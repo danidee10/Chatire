@@ -4,7 +4,7 @@
 
 # chatire
 
-Real time Chat application built with Vue, Django, RabbitMQ and uWSGI WebSockets.
+Real time Chat application built with Vue, Django, RabbitMQ and ~~uWSGI WebSockets~~ Django channels.
 
 ![chatire gif demo](./chatire.gif)
 
@@ -18,6 +18,7 @@ The tutorial is split into several parts:
 - Part 4 [Plug the Vue frontend to the django API](https://danidee10.github.io/2018/01/10/realtime-django-4.html)
 - Part 5 [uWSGI WebSockets](https://danidee10.github.io/2018/01/13/realtime-django-5.html)
 - Part 6 [Extras](https://danidee10.github.io/2018/03/12/real-time-django-6.html)
+- Part 7 [Switching to Django channels](https://danidee10.github.io/2021/03/22/realtime-django-7.html)
 
 ## Running the code
 
@@ -59,20 +60,27 @@ python manage.py runserver
 
 ### RabbitMQ
 
-Chatire uses RabbitMQ to bridge the django application and the uWSGI WebSocket server. The installation process varies. Check the [docs](https://www.rabbitmq.com/download.html) on how you can install it for your platform.
+Chatire uses RabbitMQ to bridge the django application and the ~~uWSGI WebSocket server~~. The installation process varies. Check the [docs](https://www.rabbitmq.com/download.html) on how you can install it for your platform.
 
 ### WebSocket server
 
-Chatire uses `uWSGI` as it's websocket server, if you've already installed the requirements from `requirements.txt` if should already be installed.
+~~Chatire uses `uWSGI` as it's websocket server, if you've already installed the requirements from `requirements.txt` if should already be installed.~~
 
-You can start it with
+~~You can start it with~~
 
 ```bash
 uwsgi --http :8081 --gevent 100 --module websocket --gevent-monkey-patch --master
 ```
 
-This starts uwsgi with 100 gevent (greenlet) threads. You can increase it if you want to.
+~~This starts uwsgi with 100 gevent (greenlet) threads. You can increase it if you want to.~~
+
+You can start the channels local server with:
+
+```bash
+python manage.py runserver 8081
+```
 
 
 # Acknowledgements
+
 Thanks to [@inhit](https://github.com/ihtiht) for the Logo!
