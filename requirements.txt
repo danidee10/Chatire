@@ -1,6 +1,6 @@
 amqp==2.6.1
 billiard==3.6.3.0
-celery==4.4.7
+celery==5.2.2
 channels==3.0.3
 channels-postgres==0.0.3
 Django==2.2
